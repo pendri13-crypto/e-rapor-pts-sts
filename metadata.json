@@ -1,0 +1,6 @@
+{
+  "name": "e-Rapor Penilaian Tengah Semester (PTS/STS)",
+  "description": "Sistem Rapor Penilaian Tengah Semester berbasis web untuk 33 Kelas (VII-A hingga IX-K), input nilai praktis guru mapel, rekapitulasi otomatis 3 bulanan, leger, dan cetak rapor.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
