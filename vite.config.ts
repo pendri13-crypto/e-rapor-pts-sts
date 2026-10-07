@@ -5,6 +5,7 @@ import {defineConfig} from 'vite';
 
 export default defineConfig(() => {
   return {
+    base: '/e-rapor-pts-sts/',
     plugins: [react(), tailwindcss()],
     resolve: {
       alias: {

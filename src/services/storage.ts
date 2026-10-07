@@ -401,7 +401,7 @@ export const StorageService = {
   },
   getStudentsByClass: (classId: string): Student[] => {
     const all = StorageService.getStudents();
-    return all.filter(s => s.classId === classId).sort((a, b) => a.nama.localeCompare(b.nama));
+    return all.filter(s => s.classId === classId).sort((a, b) => a.nama.trim().localeCompare(b.nama.trim()));
   },
 
   // Attendance
