@@ -115,13 +115,13 @@ export const Navbar: React.FC<NavbarProps> = ({
     },
     {
       id: 'rekap-3bulan',
-      label: 'Rekap 3 Bulan',
+      label: 'Rekap Triwulan',
       icon: Layers,
       roles: ['SUPER_ADMIN', 'GURU_MAPEL'],
     },
     {
       id: 'leger-nilai',
-      label: 'Leger & Rapor',
+      label: 'Leger',
       icon: FileSpreadsheet,
       roles: ['SUPER_ADMIN', 'GURU_MAPEL'],
     },
