@@ -167,10 +167,10 @@ export const Navbar: React.FC<NavbarProps> = ({
 
             <div className="flex flex-col">
               <div className="flex items-center gap-2">
-                <span className="font-extrabold text-[15px] sm:text-base tracking-tight text-slate-900 group-hover:text-teal-600 transition-colors">
+                <span className="font-extrabold text-[15px] sm:text-base tracking-tight text-slate-900 group-hover:text-indigo-600 transition-colors">
                   e-Rapor PTS
                 </span>
-                <span className="text-[10px] font-bold tracking-wide uppercase px-2 py-0.5 rounded-full bg-teal-50 text-teal-700 border border-teal-200/70">
+                <span className="text-[10px] font-bold tracking-wide uppercase px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200/70">
                   SMP
                 </span>
               </div>
@@ -181,7 +181,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           </div>
 
           {/* Desktop Navigation - Pill Segmented Control */}
-          <nav className="hidden lg:flex items-center p-1 bg-slate-100/90 rounded-2xl border border-slate-200/60 shadow-inner">
+          <nav className="hidden lg:flex items-center p-1 bg-slate-50/90 rounded-2xl border border-slate-200/80 shadow-inner">
             {visibleNavItems.map((item) => {
               const Icon = item.icon;
               const isActive = activeTab === item.id;
@@ -189,9 +189,9 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <button
                   key={item.id}
                   onClick={() => setActiveTab(item.id)}
-                  className={`relative flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all duration-200 ${isActive ? 'bg-white text-teal-700 shadow-xs font-extrabold ring-1 ring-slate-900/5' : 'text-slate-600 hover:text-slate-900 hover:bg-white/50'}`}
+                  className={`relative flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all duration-200 ${isActive ? 'bg-indigo-600 text-white shadow-md shadow-indigo-500/30 font-extrabold ring-1 ring-indigo-500' : 'text-slate-500 hover:text-indigo-700 hover:bg-indigo-50/80'}`}
                 >
-                  <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-teal-600' : 'text-slate-400'}`} />
+                  <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-indigo-100' : 'text-slate-400'}`} />
                   <span>{item.label}</span>
                 </button>
               );
@@ -230,10 +230,10 @@ export const Navbar: React.FC<NavbarProps> = ({
             <div className="relative" ref={dropdownRef}>
               <button
                 onClick={() => setShowUserDropdown(!showUserDropdown)}
-                className={`flex items-center gap-2.5 p-1.5 sm:px-3 sm:py-1.5 rounded-2xl border transition-all text-left ${showUserDropdown ? 'border-teal-300 bg-teal-50/50 shadow-sm ring-2 ring-teal-500/10' : 'border-slate-200/80 bg-white hover:border-slate-300 hover:bg-slate-50/80 shadow-2xs'}`}
+                className={`flex items-center gap-2.5 p-1.5 sm:px-3 sm:py-1.5 rounded-2xl border transition-all text-left ${showUserDropdown ? 'border-indigo-300 bg-indigo-50/50 shadow-sm ring-2 ring-indigo-500/10' : 'border-slate-200/80 bg-white hover:border-slate-300 hover:bg-slate-50/80 shadow-2xs'}`}
               >
                 {/* Role Avatar */}
-                <div className={`w-8 h-8 rounded-xl flex items-center justify-center text-white text-xs font-bold shadow-xs ${currentUser?.role === 'SUPER_ADMIN' ? 'bg-gradient-to-tr from-amber-500 to-amber-600' : 'bg-gradient-to-tr from-teal-600 to-emerald-600'}`}>
+                <div className={`w-8 h-8 rounded-xl flex items-center justify-center text-white text-xs font-bold shadow-xs ${currentUser?.role === 'SUPER_ADMIN' ? 'bg-gradient-to-tr from-violet-600 to-indigo-600' : 'bg-gradient-to-tr from-blue-500 to-indigo-500'}`}>
                   {currentUser?.role === 'SUPER_ADMIN' ? (
                     <Shield className="w-4 h-4" />
                   ) : (
@@ -247,7 +247,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                     <span className="text-xs font-bold text-slate-800 line-clamp-1 max-w-[120px]">
                       {currentUser?.nama?.split(',')[0]}
                     </span>
-                    <span className={`text-[9px] font-black uppercase px-1.5 py-0.2 rounded-md tracking-wider ${currentUser?.role === 'SUPER_ADMIN' ? 'bg-amber-100 text-amber-800 border border-amber-200/50' : 'bg-teal-100 text-teal-800 border border-teal-200/50'}`}>
+                    <span className={`text-[9px] font-black uppercase px-1.5 py-0.2 rounded-md tracking-wider ${currentUser?.role === 'SUPER_ADMIN' ? 'bg-indigo-100 text-indigo-800 border border-indigo-200/50' : 'bg-blue-100 text-blue-800 border border-blue-200/50'}`}>
                       {currentUser?.role === 'SUPER_ADMIN' ? 'Admin' : 'Guru'}
                     </span>
                   </div>
@@ -256,7 +256,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   </span>
                 </div>
 
-                <ChevronDown className={`w-3.5 h-3.5 text-slate-400 transition-transform duration-200 ${showUserDropdown ? 'rotate-180 text-teal-600' : ''}`} />
+                <ChevronDown className={`w-3.5 h-3.5 text-slate-400 transition-transform duration-200 ${showUserDropdown ? 'rotate-180 text-indigo-600' : ''}`} />
               </button>
 
               {/* Enhanced Dropdown Menu */}
@@ -264,10 +264,10 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <div className="absolute right-0 mt-2 w-84 bg-white rounded-3xl shadow-2xl border border-slate-200/90 p-3 z-50 animate-in fade-in zoom-in-95 duration-150">
 
                   {/* Active User Card */}
-                  <div className="p-3 bg-gradient-to-br from-slate-900 via-teal-950 to-slate-900 rounded-2xl text-white mb-2 shadow-sm border border-teal-900/50">
+                  <div className="p-3 bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 rounded-2xl text-white mb-2 shadow-sm border border-indigo-900/50">
                     <div className="flex items-start justify-between">
                       <div>
-                        <span className={`inline-block text-[9px] font-extrabold uppercase px-2 py-0.5 rounded-full mb-1.5 ${currentUser?.role === 'SUPER_ADMIN' ? 'bg-amber-400 text-slate-950' : 'bg-teal-400 text-slate-950'}`}>
+                        <span className={`inline-block text-[9px] font-extrabold uppercase px-2 py-0.5 rounded-full mb-1.5 ${currentUser?.role === 'SUPER_ADMIN' ? 'bg-indigo-400 text-slate-950' : 'bg-blue-400 text-slate-950'}`}>
                           {currentUser?.role === 'SUPER_ADMIN' ? 'Super Admin (Non-Guru)' : `Guru ${currentUser?.mapelName}`}
                         </span>
                         <h4 className="font-bold text-xs leading-snug">{currentUser?.nama}</h4>
@@ -286,7 +286,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   {/* Supabase status in dropdown */}
                   <div className="mt-2 pt-2 border-t border-slate-100 px-2 py-1 flex items-center justify-between text-[11px] text-slate-500">
                     <span className="flex items-center gap-1.5">
-                      <Database className="w-3.5 h-3.5 text-teal-600" />
+                      <Database className="w-3.5 h-3.5 text-indigo-600" />
                       <span>Supabase Cloud</span>
                     </span>
                     <span className={`text-[10px] font-bold ${supabaseConnected ? 'text-emerald-600' : 'text-slate-400'}`}>
@@ -337,7 +337,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   setActiveTab(item.id);
                   setShowMobileMenu(false);
                 }}
-                className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-bold transition-all ${isActive ? 'bg-gradient-to-r from-teal-600 to-emerald-600 text-white shadow-xs' : 'text-slate-700 hover:bg-slate-100'}`}
+                className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-bold transition-all ${isActive ? 'bg-gradient-to-r from-indigo-600 to-violet-600 text-white shadow-xs' : 'text-slate-700 hover:bg-slate-100'}`}
               >
                 <Icon className={`w-4 h-4 ${isActive ? 'text-white' : 'text-slate-400'}`} />
                 <span>{item.label}</span>
@@ -364,9 +364,9 @@ export const Navbar: React.FC<NavbarProps> = ({
             <button
               key={item.id}
               onClick={() => setActiveTab(item.id)}
-              className={`flex flex-col items-center justify-center py-1 px-2.5 rounded-xl text-[10px] font-bold transition-colors ${isActive ? 'text-teal-600' : 'text-slate-500 hover:text-slate-800'}`}
+              className={`flex flex-col items-center justify-center py-1 px-2.5 rounded-xl text-[10px] font-bold transition-colors ${isActive ? 'text-indigo-600' : 'text-slate-500 hover:text-slate-800'}`}
             >
-              <div className={`p-1 rounded-lg transition-transform ${isActive ? 'bg-teal-50 scale-110' : ''}`}>
+              <div className={`p-1 rounded-lg transition-transform ${isActive ? 'bg-indigo-50 scale-110' : ''}`}>
                 <Icon className="w-4 h-4" />
               </div>
               <span className="mt-0.5 truncate max-w-[65px]">{item.label}</span>
@@ -378,9 +378,9 @@ export const Navbar: React.FC<NavbarProps> = ({
         {currentUser?.role === 'SUPER_ADMIN' ? (
           <button
             onClick={() => setActiveTab('data-master')}
-            className={`flex flex-col items-center justify-center py-1 px-2.5 rounded-xl text-[10px] font-bold transition-colors ${(activeTab === 'data-master' || activeTab === 'pengaturan') ? 'text-teal-600' : 'text-slate-500 hover:text-slate-800'}`}
+            className={`flex flex-col items-center justify-center py-1 px-2.5 rounded-xl text-[10px] font-bold transition-colors ${(activeTab === 'data-master' || activeTab === 'pengaturan') ? 'text-indigo-600' : 'text-slate-500 hover:text-slate-800'}`}
           >
-            <div className={`p-1 rounded-lg transition-transform ${activeTab === 'data-master' || activeTab === 'pengaturan' ? 'bg-teal-50 scale-110' : ''}`}>
+            <div className={`p-1 rounded-lg transition-transform ${activeTab === 'data-master' || activeTab === 'pengaturan' ? 'bg-indigo-50 scale-110' : ''}`}>
               <Settings className="w-4 h-4" />
             </div>
             <span className="mt-0.5">Admin</span>
