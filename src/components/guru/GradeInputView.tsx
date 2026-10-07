@@ -487,7 +487,11 @@ export const GradeInputView: React.FC<GradeInputViewProps> = ({
   const filteredRows = rows.filter(r =>
     r.student.nama.toLowerCase().includes(searchQuery.toLowerCase()) ||
     r.student.nis.includes(searchQuery)
-  ).sort((a, b) => a.student.nama.trim().localeCompare(b.student.nama.trim()));
+  ).sort((a, b) => {
+    const nameA = a.student.nama.replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
+    const nameB = b.student.nama.replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
+    return nameA < nameB ? -1 : nameA > nameB ? 1 : 0;
+  });
 
   return (
     <div className="space-y-6">
