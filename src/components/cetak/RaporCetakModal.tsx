@@ -256,12 +256,9 @@ const StudentReportDocument: React.FC<StudentReportDocumentProps> = ({
 
       {/* KOLOM TANDA TANGAN RESMI */}
       <div className="pt-3 border-t border-slate-200">
-        <div className="text-right text-[10.5px] mb-1.5">
-          <span>{settings.tempatRapor}, {settings.tanggalRapor}</span>
-        </div>
-
-        <div className="grid grid-cols-3 gap-3 text-center text-[10.5px]">
-          <div>
+        <div className="grid grid-cols-3 gap-3 text-[10.5px]">
+          <div className="text-center">
+            <p className="text-slate-700">&nbsp;</p>
             <p className="text-slate-700">Mengetahui,</p>
             <p className="font-bold text-slate-800">Orang Tua / Wali Siswa</p>
             <div className="h-12" />
@@ -269,7 +266,8 @@ const StudentReportDocument: React.FC<StudentReportDocumentProps> = ({
             <p className="text-[9.5px] text-slate-500 mt-0.5">( ............................................ )</p>
           </div>
 
-          <div>
+          <div className="text-center">
+            <p className="text-slate-700">&nbsp;</p>
             <p className="text-slate-700">&nbsp;</p>
             <p className="font-bold text-slate-800">Wali Kelas,</p>
             <div className="h-12" />
@@ -277,7 +275,8 @@ const StudentReportDocument: React.FC<StudentReportDocumentProps> = ({
             <p className="text-[9.5px] text-slate-600 font-mono">NIP. {schoolClass.waliKelasNip}</p>
           </div>
 
-          <div>
+          <div className="text-left">
+            <p className="text-slate-700">{settings.tempatRapor}, {settings.tanggalRapor}</p>
             <p className="text-slate-700">Mengetahui,</p>
             <p className="font-bold text-slate-800">Kepala {settings.namaSekolah}</p>
             <div className="h-12" />
