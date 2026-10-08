@@ -28,7 +28,14 @@ const StudentReportDocument: React.FC<StudentReportDocumentProps> = ({
   totalStudentsInClass,
 }) => {
   return (
-    <div className="text-slate-900 bg-white font-sans text-xs selection:bg-none">
+    <div className="text-slate-900 bg-white font-sans text-xs selection:bg-none relative z-0 min-h-[297mm]">
+      {/* WATERMARK */}
+      {settings.logoSekolahUrl && (
+        <div className="absolute inset-0 z-[-1] flex items-center justify-center opacity-[0.06] pointer-events-none overflow-hidden select-none">
+          <img src={settings.logoSekolahUrl} alt="Watermark" className="w-[80%] max-w-[500px] object-contain grayscale" />
+        </div>
+      )}
+
       {/* KOP RESMI SEKOLAH */}
       <div className="pb-2.5 mb-3 text-center relative">
         <div className="flex items-center justify-between gap-4">
