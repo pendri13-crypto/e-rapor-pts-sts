@@ -14,7 +14,8 @@ import {
   Calculator,
   HelpCircle,
   FileCheck,
-  FileSpreadsheet
+  FileSpreadsheet,
+  Trash2
 } from 'lucide-react';
 import * as XLSX from 'xlsx';
 import { UserAccount, SchoolClass, Subject, Student, GradeRecord } from '../../types';
@@ -267,6 +268,24 @@ export const GradeInputView: React.FC<GradeInputViewProps> = ({
     setSuccessPopupMsg(`Pengisian otomatis nilai untuk ${students.length} siswa kelas ${selectedClassId} (${currentSubject.nama}) berhasil disimpan.`);
     setShowSuccessPopup(true);
     setTimeout(() => setSaveSuccessMsg(null), 3000);
+  };
+
+  // Hapus semua nilai
+  const handleClearGrades = () => {
+    if (confirm('Apakah Anda yakin ingin mengosongkan SEMUA nilai di layar untuk kelas dan mata pelajaran ini?')) {
+      const updatedRows = rows.map(row => {
+        const uRow: EditableGradeRow = {
+          ...row,
+          t1: '', t2: '', t3: '', uh1: '', uh2: '', pts: '',
+          isDirty: true
+        };
+        const calc = calculateRowValues(uRow);
+        return { ...uRow, ...calc };
+      });
+      setRows(updatedRows);
+      setSaveSuccessMsg('Semua nilai berhasil dikosongkan di layar. Jangan lupa klik "Simpan Semua Nilai" untuk menyimpannya permanen.');
+      setTimeout(() => setSaveSuccessMsg(null), 5000);
+    }
   };
 
   // Save all changes
@@ -588,6 +607,16 @@ export const GradeInputView: React.FC<GradeInputViewProps> = ({
               accept=".xlsx, .xls, .csv"
               className="hidden"
             />
+
+            {/* Clear Grades Button */}
+            <button
+              onClick={handleClearGrades}
+              className="px-3 py-2 bg-red-50 hover:bg-red-100 text-red-700 rounded-xl text-xs font-bold transition-colors flex items-center gap-1.5"
+              title="Kosongkan Semua Nilai di Layar"
+            >
+              <Trash2 className="w-3.5 h-3.5 text-red-600" />
+              <span>Hapus Nilai</span>
+            </button>
 
             {/* Save Button */}
             <button
