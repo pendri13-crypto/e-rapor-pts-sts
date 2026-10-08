@@ -56,10 +56,10 @@ const StudentReportDocument: React.FC<StudentReportDocumentProps> = ({
 
           {/* Teks KOP Resmi */}
           <div className="flex-1 px-3 text-center">
-            <h3 className="text-sm sm:text-base print:text-base font-extrabold uppercase tracking-wide text-slate-900 leading-tight">
+            <h3 className="text-sm sm:text-base print:text-[15px] font-extrabold uppercase tracking-tight sm:tracking-wide text-slate-900 leading-tight whitespace-nowrap">
               PEMERINTAH DAERAH KABUPATEN TASIKMALAYA
             </h3>
-            <h3 className="text-sm sm:text-base print:text-base font-extrabold uppercase tracking-wide text-slate-900 leading-tight">
+            <h3 className="text-sm sm:text-base print:text-[15px] font-extrabold uppercase tracking-tight sm:tracking-wide text-slate-900 leading-tight whitespace-nowrap">
               DINAS PENDIDIKAN DAN KEBUDAYAAN
             </h3>
             <h1 className="text-xl sm:text-2xl print:text-2xl font-black uppercase tracking-tight text-slate-950 mt-1 mb-0.5 leading-tight">
