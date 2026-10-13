@@ -40,16 +40,16 @@ const StudentReportDocument: React.FC<StudentReportDocumentProps> = ({
       <div className="pb-2.5 mb-3 text-center relative">
         <div className="flex items-center justify-between gap-4">
           {/* Logo Pemda / Dinas (Kiri) */}
-          <div className="w-32 h-32 sm:w-36 sm:h-36 print:w-32 print:h-32 flex items-center justify-center shrink-0">
+          <div className="w-24 h-24 print:w-24 print:h-24 flex items-center justify-center shrink-0">
             {settings.logoPemdaUrl ? (
               <img
                 src={settings.logoPemdaUrl}
                 alt="Logo Pemda"
-                className="w-full h-full max-h-32 max-w-32 sm:max-h-36 sm:max-w-36 print:max-h-32 print:max-w-32 object-contain"
+                className="w-full h-full max-h-24 max-w-24 print:max-h-24 print:max-w-24 object-contain"
               />
             ) : (
-              <div className="w-24 h-24 rounded-xl border border-slate-300 flex items-center justify-center font-bold text-slate-400 text-xs">
-                <School className="w-12 h-12 text-slate-700" />
+              <div className="w-20 h-20 rounded-xl border border-slate-300 flex items-center justify-center font-bold text-slate-400 text-xs">
+                <School className="w-10 h-10 text-slate-700" />
               </div>
             )}
           </div>
@@ -74,16 +74,16 @@ const StudentReportDocument: React.FC<StudentReportDocumentProps> = ({
           </div>
 
           {/* Logo Sekolah (Kanan) */}
-          <div className="w-32 h-32 sm:w-36 sm:h-36 print:w-32 print:h-32 flex items-center justify-center shrink-0">
+          <div className="w-24 h-24 print:w-24 print:h-24 flex items-center justify-center shrink-0">
             {settings.logoSekolahUrl ? (
               <img
                 src={settings.logoSekolahUrl}
                 alt="Logo Sekolah"
-                className="w-full h-full max-h-32 max-w-32 sm:max-h-36 sm:max-w-36 print:max-h-32 print:max-w-32 object-contain"
+                className="w-full h-full max-h-24 max-w-24 print:max-h-24 print:max-w-24 object-contain"
               />
             ) : (
-              <div className="w-24 h-24 rounded-xl border border-slate-300 flex items-center justify-center font-bold text-slate-400 text-xs">
-                <span className="text-[11px] font-bold text-center leading-tight">LOGO<br />SEKOLAH</span>
+              <div className="w-20 h-20 rounded-xl border border-slate-300 flex items-center justify-center font-bold text-slate-400 text-xs">
+                <span className="text-[10px] font-bold text-center leading-tight">LOGO<br />SEKOLAH</span>
               </div>
             )}
           </div>
