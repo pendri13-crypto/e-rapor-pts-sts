@@ -85,6 +85,7 @@ export const GradeInputView: React.FC<GradeInputViewProps> = ({
 
   const currentClass = classes.find(c => c.id === selectedClassId);
   const currentSubject = subjects.find(s => s.id === selectedMapelId) || subjects[0];
+  const currentKkm = StorageService.getClassKkm(currentClass?.tingkat || selectedClassId);
 
   // Load existing grades or initialize empty rows
   useEffect(() => {
@@ -168,7 +169,7 @@ export const GradeInputView: React.FC<GradeInputViewProps> = ({
       formatifAvg,
       uhAvg,
       pts,
-      currentSubject.kkm,
+      currentKkm,
       settings.bobotFormatif,
       settings.bobotUH,
       settings.bobotPTS,
@@ -530,7 +531,7 @@ export const GradeInputView: React.FC<GradeInputViewProps> = ({
               Penilaian Tengah Semester (PTS) Siswa
             </h1>
             <p className="text-xs text-slate-500 mt-0.5">
-              KKM / KKTP Mata Pelajaran {currentSubject.nama}: <strong>{currentSubject.kkm}</strong> • Tekan <em>Enter</em> untuk langsung beralih ke siswa baris berikutnya.
+              KKM / KKTP Mata Pelajaran {currentSubject.nama}: <strong>{currentKkm}</strong> • Tekan <em>Enter</em> untuk langsung beralih ke siswa baris berikutnya.
             </p>
           </div>
 
@@ -555,7 +556,7 @@ export const GradeInputView: React.FC<GradeInputViewProps> = ({
                     onClick={() => handleAutoFill('kkm')}
                     className="w-full text-left px-3 py-2 text-xs rounded-xl hover:bg-slate-100 text-slate-800 font-medium"
                   >
-                    🎯 Isi Nilai Standar KKM ({currentSubject.kkm})
+                    🎯 Isi Nilai Standar KKM ({currentKkm})
                   </button>
                   <button
                     onClick={() => handleAutoFill('acak')}
@@ -686,7 +687,7 @@ export const GradeInputView: React.FC<GradeInputViewProps> = ({
             >
               {subjects.map(s => (
                 <option key={s.id} value={s.id}>
-                  {s.nama} ({s.kelompok} • KKM: {s.kkm})
+                  {s.nama} ({s.kelompok} • KKM: {currentKkm})
                 </option>
               ))}
             </select>
@@ -726,7 +727,7 @@ export const GradeInputView: React.FC<GradeInputViewProps> = ({
             </div>
             <div className="text-right">
               <span className="text-[11px] font-bold px-2 py-0.5 bg-indigo-600 text-white rounded-md">
-                KKM {currentSubject.kkm}
+                KKM {currentKkm}
               </span>
             </div>
           </div>
@@ -777,7 +778,7 @@ export const GradeInputView: React.FC<GradeInputViewProps> = ({
             </thead>
             <tbody className="divide-y divide-slate-200 font-mono">
               {filteredRows.map((row, index) => {
-                const isUnderKkm = row.nilaiAkhir > 0 && row.nilaiAkhir < currentSubject.kkm;
+                const isUnderKkm = row.nilaiAkhir > 0 && row.nilaiAkhir < currentKkm;
 
                 return (
                   <tr

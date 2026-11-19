@@ -56,6 +56,7 @@ export const RekapitulasiView: React.FC<RekapitulasiViewProps> = ({
   const [showBatchPrintAll, setShowBatchPrintAll] = useState(false);
 
   const currentClass = classes.find(c => c.id === selectedClassId);
+  const classKkm = StorageService.getClassKkm(selectedClassId);
   const summaryData = StorageService.getClassSummary(selectedClassId);
 
   // Filtered summaries
@@ -160,7 +161,7 @@ export const RekapitulasiView: React.FC<RekapitulasiViewProps> = ({
           </div>
 
           <div className="flex items-center gap-1.5 text-xs text-slate-500">
-            <span>Standar KKM: <strong>{settings.kkmDefault}</strong></span>
+            <span>Standar KKM: <strong>{classKkm}</strong></span>
             <span>•</span>
             <span>Komponen: <strong>11 Mapel Lengkap</strong></span>
           </div>
@@ -413,7 +414,7 @@ export const RekapitulasiView: React.FC<RekapitulasiViewProps> = ({
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {subjects.map(subj => {
                 const avg = summaryData.mapelAverages[subj.id] || 0;
-                const isUnderKkm = avg > 0 && avg < subj.kkm;
+                const isUnderKkm = avg > 0 && avg < classKkm;
                 const isFilled = avg > 0;
 
                 return (
@@ -437,7 +438,7 @@ export const RekapitulasiView: React.FC<RekapitulasiViewProps> = ({
                         }`}>
                           {avg || '-'}
                         </span>
-                        <span className="text-[10px] text-slate-400 block">KKM: {subj.kkm}</span>
+                        <span className="text-[10px] text-slate-400 block">KKM: {classKkm}</span>
                       </div>
                     </div>
 
@@ -478,7 +479,7 @@ export const RekapitulasiView: React.FC<RekapitulasiViewProps> = ({
                 <span>Program Pendampingan Remedial Tengah Semester</span>
               </h4>
               <p className="mt-1 leading-relaxed">
-                Daftar siswa di bawah ini membutuhkan bimbingan atau tes remedial pada mata pelajaran yang belum mencapai KKM ({settings.kkmDefault}). Wali kelas dapat berkoordinasi langsung dengan masing-masing guru mapel.
+                Daftar siswa di bawah ini membutuhkan bimbingan atau tes remedial pada mata pelajaran yang belum mencapai KKM ({classKkm}). Wali kelas dapat berkoordinasi langsung dengan masing-masing guru mapel.
               </p>
             </div>
 
@@ -504,7 +505,7 @@ export const RekapitulasiView: React.FC<RekapitulasiViewProps> = ({
                       // Find which subjects are under KKM
                       const failedSubjects = subjects.filter(s => {
                         const rec = item.grades[s.id];
-                        return !rec || rec.nilaiAkhir < s.kkm;
+                        return !rec || rec.nilaiAkhir < classKkm;
                       });
 
                       return (
@@ -524,7 +525,7 @@ export const RekapitulasiView: React.FC<RekapitulasiViewProps> = ({
                                     key={sub.id}
                                     className="px-2 py-0.5 rounded-md bg-rose-100 text-rose-800 text-[10px] font-bold"
                                   >
-                                    {sub.nama}: {score} (KKM: {sub.kkm})
+                                    {sub.nama}: {score} (KKM: {classKkm})
                                   </span>
                                 );
                               })}

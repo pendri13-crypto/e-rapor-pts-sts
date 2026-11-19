@@ -42,6 +42,7 @@ export const LegerNilaiView: React.FC<LegerNilaiViewProps> = ({
   const [searchQuery, setSearchQuery] = useState('');
 
   const currentClass = classes.find(c => c.id === selectedClassId);
+  const classKkm = StorageService.getClassKkm(selectedClassId);
   const summaryData = StorageService.getClassSummary(selectedClassId);
 
   const filteredSummaries = summaryData.summaries.filter(s =>
@@ -179,7 +180,7 @@ export const LegerNilaiView: React.FC<LegerNilaiViewProps> = ({
                     key={s.id}
                     className="py-1.5 px-1.5 w-12 border border-slate-600 cursor-pointer hover:bg-slate-600 transition-colors"
                     onClick={() => onNavigateToInput(selectedClassId, s.id)}
-                    title={`${s.nama} (KKM: ${s.kkm}) - Klik untuk input nilai`}
+                    title={`${s.nama} (KKM: ${classKkm}) - Klik untuk input nilai`}
                   >
                     {s.kode}
                   </th>
@@ -210,7 +211,7 @@ export const LegerNilaiView: React.FC<LegerNilaiViewProps> = ({
                     {subjects.map(subj => {
                       const rec = item.grades[subj.id];
                       const score = rec?.nilaiAkhir ?? null;
-                      const isUnderKkm = score !== null && score < subj.kkm;
+                      const isUnderKkm = score !== null && score < classKkm;
 
                       return (
                         <td

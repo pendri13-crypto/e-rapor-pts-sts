@@ -351,7 +351,7 @@ export const DashboardHome: React.FC<DashboardHomeProps> = ({
           Nilai Rapor Penilaian Tengah Semester (PTS) direkapitulasi secara otomatis dari 3 komponen utama:
           <strong> Nilai Rata-rata Tugas Formatif ({settings.bobotFormatif}%)</strong>, 
           <strong> Nilai Rata-rata Sumatif Lingkup Materi / Ulangan Harian ({settings.bobotUH}%)</strong>, dan 
-          <strong> Nilai Tes Sumatif Tengah Semester / PTS ({settings.bobotPTS}%)</strong> dengan standar KKM {settings.kkmDefault}.
+          <strong> Nilai Tes Sumatif Tengah Semester / PTS ({settings.bobotPTS}%)</strong> dengan standar KKM per tingkatan (Kelas VII: {settings.kkmKelas7 ?? 76}, Kelas VIII: {settings.kkmKelas8 ?? 78}, Kelas IX: {settings.kkmKelas9 ?? 80}).
           Wali kelas dapat langsung mencetak Leger Nilai 11 mapel dan lembar Rapor Siswa resmi tanpa perlu menghitung manual.
         </p>
       </div>

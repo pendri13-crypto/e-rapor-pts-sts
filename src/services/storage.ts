@@ -168,6 +168,33 @@ export const StorageService = {
     SupabaseService.syncSettings(settings).catch(() => {});
   },
 
+  // Helper mendapatkan KKM sesuai tingkatan kelas (VII, VIII, IX) atau default
+  getClassKkm: (classIdOrTingkat?: string): number => {
+    const settings = StorageService.getSettings();
+    if (!classIdOrTingkat) return settings.kkmDefault || 75;
+
+    const str = String(classIdOrTingkat).trim();
+    if (str.includes('VII') || str.startsWith('7')) {
+      return Number(settings.kkmKelas7 ?? settings.kkmDefault ?? 76);
+    }
+    if (str.includes('VIII') || str.startsWith('8')) {
+      return Number(settings.kkmKelas8 ?? settings.kkmDefault ?? 78);
+    }
+    if (str.includes('IX') || str.startsWith('9')) {
+      return Number(settings.kkmKelas9 ?? settings.kkmDefault ?? 80);
+    }
+
+    const classes = StorageService.getClasses();
+    const cls = classes.find(c => c.id === str);
+    if (cls) {
+      if (cls.tingkat === 'VII') return Number(settings.kkmKelas7 ?? settings.kkmDefault ?? 76);
+      if (cls.tingkat === 'VIII') return Number(settings.kkmKelas8 ?? settings.kkmDefault ?? 78);
+      if (cls.tingkat === 'IX') return Number(settings.kkmKelas9 ?? settings.kkmDefault ?? 80);
+    }
+
+    return Number(settings.kkmDefault || 75);
+  },
+
   // Classes (33 Classes)
   getClasses: (): SchoolClass[] => {
     return getStored<SchoolClass[]>(STORAGE_KEYS.CLASSES, INITIAL_CLASSES);
@@ -612,11 +639,12 @@ export const StorageService = {
 
       let jumlahMapelTuntas = 0;
       let jumlahMapelBelumTuntas = 0;
+      const classKkm = StorageService.getClassKkm(classId);
 
       for (const subj of subjects) {
         const rec = sGrades[subj.id];
         if (rec) {
-          if (rec.nilaiAkhir >= subj.kkm) {
+          if (rec.nilaiAkhir >= classKkm) {
             jumlahMapelTuntas++;
           } else {
             jumlahMapelBelumTuntas++;
@@ -670,7 +698,8 @@ export const StorageService = {
     }
 
     // At risk students (rata-rata < KKM or > 2 mapel belum tuntas)
-    const atRiskStudents = summaries.filter(s => s.rataRata < 75 || s.jumlahMapelBelumTuntas > 2);
+    const classKkm = StorageService.getClassKkm(classId);
+    const atRiskStudents = summaries.filter(s => s.rataRata < classKkm || s.jumlahMapelBelumTuntas > 2);
 
     return {
       summaries,
@@ -690,17 +719,18 @@ export const StorageService = {
     const subjects = StorageService.getSubjects();
     const settings = StorageService.getSettings();
     const subject = subjects.find(s => s.id === mapelId) || subjects[0];
+    const classKkm = StorageService.getClassKkm(classId);
 
     const records: GradeRecord[] = students.map(student => {
-      let t1 = 75, t2 = 75, t3 = 75, uh1 = 75, uh2 = 75, pts = 75;
+      let t1 = classKkm, t2 = classKkm, t3 = classKkm, uh1 = classKkm, uh2 = classKkm, pts = classKkm;
 
       if (type === 'kkm') {
-        t1 = subject.kkm;
-        t2 = subject.kkm;
-        t3 = subject.kkm;
-        uh1 = subject.kkm;
-        uh2 = subject.kkm;
-        pts = subject.kkm;
+        t1 = classKkm;
+        t2 = classKkm;
+        t3 = classKkm;
+        uh1 = classKkm;
+        uh2 = classKkm;
+        pts = classKkm;
       } else if (type === 'tinggi') {
         t1 = 88; t2 = 90; t3 = 92;
         uh1 = 89; uh2 = 91;
@@ -708,7 +738,7 @@ export const StorageService = {
       } else {
         // Realistis acak
         const randSeed = Math.floor(Math.random() * 20);
-        const base = Math.min(95, Math.max(65, 76 + randSeed - 8));
+        const base = Math.min(95, Math.max(65, classKkm + randSeed - 8));
         t1 = Math.min(100, Math.max(60, base + Math.floor(Math.random() * 6) - 3));
         t2 = Math.min(100, Math.max(60, base + Math.floor(Math.random() * 6) - 3));
         t3 = Math.min(100, Math.max(60, base + Math.floor(Math.random() * 6) - 3));
@@ -723,7 +753,7 @@ export const StorageService = {
         formatifAvg,
         sumatifMateriAvg,
         pts,
-        subject.kkm,
+        classKkm,
         settings.bobotFormatif,
         settings.bobotUH,
         settings.bobotPTS,
