@@ -28,6 +28,9 @@ export const INITIAL_SCHOOL_SETTINGS: SchoolSettings = {
   bobotUH: 0,
   bobotPTS: 100,
   kkmDefault: 75,
+  kkmKelas7: 76,
+  kkmKelas8: 78,
+  kkmKelas9: 80,
 };
 
 // 11 Mata Pelajaran Resmi SMP

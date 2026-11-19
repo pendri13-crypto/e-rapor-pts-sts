@@ -158,6 +158,9 @@ export const StorageService = {
     return {
       ...INITIAL_SCHOOL_SETTINGS,
       ...s,
+      kkmKelas7: s.kkmKelas7 ?? 76,
+      kkmKelas8: s.kkmKelas8 ?? 78,
+      kkmKelas9: s.kkmKelas9 ?? 80,
       logoPemdaUrl: s.logoPemdaUrl !== undefined ? s.logoPemdaUrl : INITIAL_SCHOOL_SETTINGS.logoPemdaUrl,
       logoSekolahUrl: (s.logoSekolahUrl && !s.logoSekolahUrl.startsWith('data:image/svg+xml') && s.logoSekolahUrl !== 'https://i.ibb.co.com/rGJLMWct/LOGO-SEKOLAH-3-D-SMPN-1-RAJAPOLAH.png') ? s.logoSekolahUrl : INITIAL_SCHOOL_SETTINGS.logoSekolahUrl,
     };
@@ -171,25 +174,24 @@ export const StorageService = {
   // Helper mendapatkan KKM sesuai tingkatan kelas (VII, VIII, IX) atau default
   getClassKkm: (classIdOrTingkat?: string): number => {
     const settings = StorageService.getSettings();
-    if (!classIdOrTingkat) return settings.kkmDefault || 75;
+    const str = String(classIdOrTingkat || '').trim();
 
-    const str = String(classIdOrTingkat).trim();
     if (str.includes('VII') || str.startsWith('7')) {
-      return Number(settings.kkmKelas7 ?? settings.kkmDefault ?? 76);
+      return Number(settings.kkmKelas7 || 76);
     }
     if (str.includes('VIII') || str.startsWith('8')) {
-      return Number(settings.kkmKelas8 ?? settings.kkmDefault ?? 78);
+      return Number(settings.kkmKelas8 || 78);
     }
     if (str.includes('IX') || str.startsWith('9')) {
-      return Number(settings.kkmKelas9 ?? settings.kkmDefault ?? 80);
+      return Number(settings.kkmKelas9 || 80);
     }
 
     const classes = StorageService.getClasses();
     const cls = classes.find(c => c.id === str);
     if (cls) {
-      if (cls.tingkat === 'VII') return Number(settings.kkmKelas7 ?? settings.kkmDefault ?? 76);
-      if (cls.tingkat === 'VIII') return Number(settings.kkmKelas8 ?? settings.kkmDefault ?? 78);
-      if (cls.tingkat === 'IX') return Number(settings.kkmKelas9 ?? settings.kkmDefault ?? 80);
+      if (cls.tingkat === 'VII') return Number(settings.kkmKelas7 || 76);
+      if (cls.tingkat === 'VIII') return Number(settings.kkmKelas8 || 78);
+      if (cls.tingkat === 'IX') return Number(settings.kkmKelas9 || 80);
     }
 
     return Number(settings.kkmDefault || 75);
