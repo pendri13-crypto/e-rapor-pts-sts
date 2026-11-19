@@ -314,6 +314,9 @@ export const LoginView: React.FC<LoginViewProps> = ({ onLoginSuccess }) => {
               </button>
             </div>
           </div>
+          <p className="mt-4 text-center text-xs text-slate-400">
+            Software Engineer Pendri Prayoga, S.Kom
+          </p>
         </div>
       </div>
 

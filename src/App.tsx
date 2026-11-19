@@ -128,9 +128,12 @@ export default function App() {
             <span>11 Mata Pelajaran Resmi</span>
           </div>
 
-          <div className="flex items-center gap-4">
+          <div className="flex flex-wrap items-center gap-3 sm:gap-4">
             <span>Standar Kurikulum Merdeka</span>
+            <span>•</span>
             <span>Rekapitulasi 3 Bulanan Otomatis</span>
+            <span>•</span>
+            <span className="font-semibold text-slate-700">Software Engineer Pendri Prayoga, S.Kom</span>
           </div>
         </div>
       </footer>
