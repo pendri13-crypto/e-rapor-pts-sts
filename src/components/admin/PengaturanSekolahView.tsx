@@ -973,14 +973,14 @@ export const PengaturanSekolahView: React.FC = () => {
 
               {/* Replica KOP */}
               <div className="bg-white p-6 sm:p-8 rounded-2xl border-2 border-slate-300 shadow-sm max-w-4xl mx-auto">
-                <div className="flex items-center justify-between gap-4">
+                <div className="flex items-center justify-between gap-3 sm:gap-4">
                   {/* Logo Pemda */}
-                  <div className="w-24 h-24 flex items-center justify-center shrink-0">
+                  <div className="w-24 h-24 sm:w-28 sm:h-28 flex items-center justify-center shrink-0 overflow-hidden">
                     {settings.logoPemdaUrl ? (
                       <img
                         src={settings.logoPemdaUrl}
                         alt="Logo Pemda"
-                        className="max-h-24 max-w-24 object-contain"
+                        className="max-h-28 max-w-28 object-contain scale-110"
                       />
                     ) : (
                       <div className="w-18 h-18 rounded-xl border border-slate-300 flex items-center justify-center font-bold text-slate-400 text-[10px]">
@@ -1009,12 +1009,14 @@ export const PengaturanSekolahView: React.FC = () => {
                   </div>
 
                   {/* Logo Sekolah */}
-                  <div className="w-24 h-24 flex items-center justify-center shrink-0">
+                  <div className="w-24 h-24 sm:w-28 sm:h-28 flex items-center justify-center shrink-0 overflow-hidden">
                     {settings.logoSekolahUrl ? (
                       <img
                         src={settings.logoSekolahUrl}
                         alt="Logo Sekolah"
-                        className="max-h-24 max-w-24 object-contain"
+                        className={`max-h-28 max-w-28 object-contain ${
+                          (settings.logoSekolahUrl || '').includes('LOGO-SEKOLAH') ? 'scale-[1.55]' : 'scale-110'
+                        }`}
                       />
                     ) : (
                       <div className="w-18 h-18 rounded-xl border border-slate-300 flex items-center justify-center font-bold text-slate-400 text-[10px]">

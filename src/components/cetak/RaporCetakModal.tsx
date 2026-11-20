@@ -38,14 +38,14 @@ const StudentReportDocument: React.FC<StudentReportDocumentProps> = ({
 
       {/* KOP RESMI SEKOLAH */}
       <div className="pb-2.5 mb-3 text-center relative">
-        <div className="flex items-center justify-between gap-4">
+        <div className="flex items-center justify-between gap-3 sm:gap-4">
           {/* Logo Pemda / Dinas (Kiri) */}
-          <div className="w-24 h-24 print:w-24 print:h-24 flex items-center justify-center shrink-0">
+          <div className="w-24 h-24 sm:w-28 sm:h-28 print:w-24 print:h-24 flex items-center justify-center shrink-0 overflow-hidden">
             {settings.logoPemdaUrl ? (
               <img
                 src={settings.logoPemdaUrl}
                 alt="Logo Pemda"
-                className="w-full h-full max-h-24 max-w-24 print:max-h-24 print:max-w-24 object-contain"
+                className="w-full h-full max-h-28 max-w-28 print:max-h-24 print:max-w-24 object-contain scale-110"
               />
             ) : (
               <div className="w-20 h-20 rounded-xl border border-slate-300 flex items-center justify-center font-bold text-slate-400 text-xs">
@@ -55,7 +55,7 @@ const StudentReportDocument: React.FC<StudentReportDocumentProps> = ({
           </div>
 
           {/* Teks KOP Resmi */}
-          <div className="flex-1 px-3 text-center">
+          <div className="flex-1 px-2 sm:px-3 text-center">
             <h3 className="text-sm sm:text-base print:text-[15px] font-extrabold uppercase tracking-tight sm:tracking-wide text-slate-900 leading-tight whitespace-nowrap">
               PEMERINTAH DAERAH KABUPATEN TASIKMALAYA
             </h3>
@@ -74,12 +74,14 @@ const StudentReportDocument: React.FC<StudentReportDocumentProps> = ({
           </div>
 
           {/* Logo Sekolah (Kanan) */}
-          <div className="w-24 h-24 print:w-24 print:h-24 flex items-center justify-center shrink-0">
+          <div className="w-24 h-24 sm:w-28 sm:h-28 print:w-24 print:h-24 flex items-center justify-center shrink-0 overflow-hidden">
             {settings.logoSekolahUrl ? (
               <img
                 src={settings.logoSekolahUrl}
                 alt="Logo Sekolah"
-                className="w-full h-full max-h-24 max-w-24 print:max-h-24 print:max-w-24 object-contain"
+                className={`w-full h-full max-h-28 max-w-28 print:max-h-24 print:max-w-24 object-contain ${
+                  (settings.logoSekolahUrl || '').includes('LOGO-SEKOLAH') ? 'scale-[1.55]' : 'scale-110'
+                }`}
               />
             ) : (
               <div className="w-20 h-20 rounded-xl border border-slate-300 flex items-center justify-center font-bold text-slate-400 text-xs">
