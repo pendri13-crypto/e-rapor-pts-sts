@@ -974,16 +974,17 @@ export const PengaturanSekolahView: React.FC = () => {
               {/* Replica KOP */}
               <div className="bg-white p-6 sm:p-8 rounded-2xl border-2 border-slate-300 shadow-sm max-w-4xl mx-auto">
                 <div className="flex items-center justify-between gap-3 sm:gap-4">
-                  {/* Logo Pemda */}
-                  <div className="w-24 h-24 sm:w-28 sm:h-28 flex items-center justify-center shrink-0 overflow-hidden">
+                  {/* Logo Pemda - Tinggi: 2.4cm, Lebar: auto (proporsional) */}
+                  <div className="h-[2.4cm] flex items-center justify-center shrink-0">
                     {settings.logoPemdaUrl ? (
                       <img
                         src={settings.logoPemdaUrl}
                         alt="Logo Pemda"
-                        className="max-h-28 max-w-28 object-contain scale-110"
+                        className="h-[2.4cm] w-auto max-h-[2.4cm] object-contain"
+                        style={{ height: '2.4cm', width: 'auto', maxHeight: '2.4cm' }}
                       />
                     ) : (
-                      <div className="w-18 h-18 rounded-xl border border-slate-300 flex items-center justify-center font-bold text-slate-400 text-[10px]">
+                      <div className="h-[2.4cm] w-[2.4cm] rounded-xl border border-slate-300 flex items-center justify-center font-bold text-slate-400 text-[10px]">
                         <School className="w-8 h-8 text-slate-600" />
                       </div>
                     )}
@@ -1008,18 +1009,17 @@ export const PengaturanSekolahView: React.FC = () => {
                     </p>
                   </div>
 
-                  {/* Logo Sekolah */}
-                  <div className="w-24 h-24 sm:w-28 sm:h-28 flex items-center justify-center shrink-0 overflow-hidden">
+                  {/* Logo Sekolah - Tinggi: 2.4cm, Lebar: auto (proporsional) */}
+                  <div className="h-[2.4cm] flex items-center justify-center shrink-0">
                     {settings.logoSekolahUrl ? (
                       <img
                         src={settings.logoSekolahUrl}
                         alt="Logo Sekolah"
-                        className={`max-h-28 max-w-28 object-contain ${
-                          (settings.logoSekolahUrl || '').includes('LOGO-SEKOLAH') ? 'scale-[1.55]' : 'scale-110'
-                        }`}
+                        className="h-[2.4cm] w-auto max-h-[2.4cm] object-contain"
+                        style={{ height: '2.4cm', width: 'auto', maxHeight: '2.4cm' }}
                       />
                     ) : (
-                      <div className="w-18 h-18 rounded-xl border border-slate-300 flex items-center justify-center font-bold text-slate-400 text-[10px]">
+                      <div className="h-[2.4cm] w-[2.4cm] rounded-xl border border-slate-300 flex items-center justify-center font-bold text-slate-400 text-[10px]">
                         <span className="text-[9px] font-bold text-center leading-tight">LOGO<br />SEKOLAH</span>
                       </div>
                     )}
