@@ -19,12 +19,14 @@ interface LegerNilaiViewProps {
   currentUser: UserAccount;
   initialClassId?: string;
   onNavigateToInput: (classId: string, mapelId?: string) => void;
+  onNavigateToKehadiran?: (classId: string) => void;
 }
 
 export const LegerNilaiView: React.FC<LegerNilaiViewProps> = ({
   currentUser,
   initialClassId,
   onNavigateToInput,
+  onNavigateToKehadiran,
 }) => {
   const classes = StorageService.getClasses();
   const subjects = StorageService.getSubjects();
@@ -87,6 +89,15 @@ export const LegerNilaiView: React.FC<LegerNilaiViewProps> = ({
           </div>
 
           <div className="flex items-center gap-2">
+            {onNavigateToKehadiran && (
+              <button
+                onClick={() => onNavigateToKehadiran(selectedClassId)}
+                className="px-3.5 py-2 bg-teal-50 hover:bg-teal-100 text-teal-700 border border-teal-200 rounded-xl text-xs font-bold transition-colors flex items-center gap-1.5"
+                title="Input Kehadiran Siswa (Sakit, Ijin, Alfa)"
+              >
+                <span>Input Kehadiran (S, I, A)</span>
+              </button>
+            )}
             <button
               onClick={handleExportLegerExcel}
               className="px-3.5 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 rounded-xl text-xs font-bold transition-colors flex items-center gap-1.5"
@@ -185,9 +196,9 @@ export const LegerNilaiView: React.FC<LegerNilaiViewProps> = ({
                     {s.kode}
                   </th>
                 ))}
-                <th className="py-1.5 px-1 w-7 border border-slate-600" title="Sakit">S</th>
-                <th className="py-1.5 px-1 w-7 border border-slate-600" title="Izin">I</th>
-                <th className="py-1.5 px-1 w-7 border border-slate-600" title="Alpa">A</th>
+                <th className="py-1.5 px-1 w-7 border border-slate-600" title="S = Sakit">S</th>
+                <th className="py-1.5 px-1 w-7 border border-slate-600" title="I = Ijin">I</th>
+                <th className="py-1.5 px-1 w-7 border border-slate-600" title="A = Alfa">A</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-200 font-mono">

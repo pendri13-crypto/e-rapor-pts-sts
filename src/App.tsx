@@ -5,6 +5,7 @@ import { LoginView } from './components/LoginView';
 import { Navbar } from './components/Navbar';
 import { DashboardHome } from './components/DashboardHome';
 import { GradeInputView } from './components/guru/GradeInputView';
+import { AttendanceInputView } from './components/kehadiran/AttendanceInputView';
 import { RekapitulasiView } from './components/rekap/RekapitulasiView';
 import { LegerNilaiView } from './components/rekap/LegerNilaiView';
 import { DataMasterView } from './components/admin/DataMasterView';
@@ -91,6 +92,14 @@ export default function App() {
           />
         )}
 
+        {activeTab === 'input-kehadiran' && (
+          <AttendanceInputView
+            currentUser={currentUser}
+            initialClassId={selectedClassId}
+            onNavigateToLeger={(classId) => handleNavigate('leger-nilai', classId)}
+          />
+        )}
+
         {activeTab === 'rekap-3bulan' && (
           <RekapitulasiView
             currentUser={currentUser}
@@ -105,6 +114,7 @@ export default function App() {
             currentUser={currentUser}
             initialClassId={selectedClassId}
             onNavigateToInput={(classId, mapelId) => handleNavigate('input-nilai', classId, mapelId)}
+            onNavigateToKehadiran={(classId) => handleNavigate('input-kehadiran', classId)}
           />
         )}
 

@@ -253,6 +253,38 @@ export const SupabaseService = {
     }
   },
 
+  // Push Attendance (S, I, A) to Supabase
+  syncAttendance: async (records: AttendanceRecord[]): Promise<boolean> => {
+    try {
+      if (!isSupabaseConfigured()) return false;
+      if (!records || records.length === 0) return true;
+
+      const payload = records.map(r => ({
+        id: `att-${r.studentId}`,
+        student_id: r.studentId,
+        class_id: r.classId,
+        sakit: Number(r.sakit || 0),
+        izin: Number(r.izin || 0),
+        alpa: Number(r.alpa || 0),
+        catatan_wali_kelas: r.catatanWaliKelas || '',
+        updated_at: new Date().toISOString()
+      }));
+
+      for (let i = 0; i < payload.length; i += 200) {
+        const chunk = payload.slice(i, i + 200);
+        const { error } = await supabase.from('attendance_records').upsert(chunk, { onConflict: 'id' });
+        if (error) {
+          console.warn('Supabase syncAttendance warning:', error.message);
+          return false;
+        }
+      }
+      return true;
+    } catch (err) {
+      console.warn('Supabase syncAttendance error:', err);
+      return false;
+    }
+  },
+
   // Push Students to Supabase
   syncStudents: async (students: Student[]): Promise<boolean> => {
     try {

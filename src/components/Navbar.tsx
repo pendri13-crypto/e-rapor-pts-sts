@@ -114,6 +114,12 @@ export const Navbar: React.FC<NavbarProps> = ({
       roles: ['SUPER_ADMIN', 'GURU_MAPEL'],
     },
     {
+      id: 'input-kehadiran',
+      label: 'Kehadiran (S, I, A)',
+      icon: UserCheck,
+      roles: ['SUPER_ADMIN', 'GURU_MAPEL'],
+    },
+    {
       id: 'rekap-3bulan',
       label: 'Rekap Triwulan',
       icon: Layers,
@@ -357,7 +363,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
       {/* Floating Bottom App Bar for Mobile (Always accessible, thumb friendly) */}
       <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/90 backdrop-blur-xl border-t border-slate-200/90 py-1.5 px-3 flex items-center justify-around shadow-[0_-4px_16px_rgba(0,0,0,0.04)] print:hidden">
-        {visibleNavItems.slice(0, 4).map((item) => {
+        {visibleNavItems.slice(0, 5).map((item) => {
           const Icon = item.icon;
           const isActive = activeTab === item.id;
           return (

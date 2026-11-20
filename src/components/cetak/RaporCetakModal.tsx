@@ -236,11 +236,11 @@ const StudentReportDocument: React.FC<StudentReportDocumentProps> = ({
                 <td className="py-0.5 px-2 text-center font-bold">{summary.kehadiran?.sakit ?? 0} hari</td>
               </tr>
               <tr>
-                <td className="py-0.5 px-2.5">Izin (I)</td>
+                <td className="py-0.5 px-2.5">Ijin (I)</td>
                 <td className="py-0.5 px-2 text-center font-bold">{summary.kehadiran?.izin ?? 0} hari</td>
               </tr>
               <tr>
-                <td className="py-0.5 px-2.5">Tanpa Keterangan (A)</td>
+                <td className="py-0.5 px-2.5">Alfa (A)</td>
                 <td className="py-0.5 px-2 text-center font-bold">{summary.kehadiran?.alpa ?? 0} hari</td>
               </tr>
             </tbody>

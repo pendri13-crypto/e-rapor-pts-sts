@@ -443,6 +443,17 @@ export const StorageService = {
   },
   saveAttendance: (records: AttendanceRecord[]) => {
     setStored(STORAGE_KEYS.ATTENDANCE, records);
+    SupabaseService.syncAttendance(records).catch(() => {});
+  },
+  getAttendanceByClass: (classId: string): AttendanceRecord[] => {
+    return StorageService.getAttendance().filter(a => a.classId === classId);
+  },
+  saveAttendanceForClass: (classId: string, records: AttendanceRecord[]) => {
+    const all = StorageService.getAttendance();
+    const other = all.filter(a => a.classId !== classId);
+    const updated = [...other, ...records];
+    StorageService.saveAttendance(updated);
+    return updated;
   },
   getAttendanceForStudent: (studentId: string): AttendanceRecord | undefined => {
     const all = StorageService.getAttendance();
@@ -493,8 +504,9 @@ export const StorageService = {
       const users = StorageService.getUsers();
       const students = StorageService.getStudents();
       const grades = StorageService.getGrades();
+      const attendance = StorageService.getAttendance();
 
-      const [resSettings, resClasses, resSubjects, resUsers, resStudents, resGrades] =
+      const [resSettings, resClasses, resSubjects, resUsers, resStudents, resGrades, resAtt] =
         await Promise.all([
           SupabaseService.syncSettings(settings),
           SupabaseService.syncClasses(classes),
@@ -502,6 +514,7 @@ export const StorageService = {
           SupabaseService.syncUsers(users),
           SupabaseService.syncStudents(students),
           SupabaseService.syncGrades(grades),
+          SupabaseService.syncAttendance(attendance),
         ]);
 
       if (resSettings || resGrades || resStudents || resUsers) {
