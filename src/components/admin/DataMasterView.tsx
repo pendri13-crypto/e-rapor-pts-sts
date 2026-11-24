@@ -380,7 +380,7 @@ export const DataMasterView: React.FC = () => {
       )}
 
       {/* Tab Switcher & Header */}
-      <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-xs">
+      <div className="bg-white rounded-3xl p-6 border border-slate-200/90 shadow-sm">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-50 text-amber-800 border border-amber-200">
@@ -444,7 +444,7 @@ export const DataMasterView: React.FC = () => {
       {/* SUBTAB 1: GURU MAPEL */}
       {/* ============================================================ */}
       {activeTab === 'guru' && (
-        <div className="bg-white rounded-3xl border border-slate-200 shadow-xs p-6 space-y-5">
+        <div className="bg-white rounded-3xl border border-slate-200/90 shadow-sm p-6 space-y-5">
           {/* Card Status Akun Super Administrator Terpisah */}
           <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-amber-500/10 via-amber-500/5 to-transparent border border-amber-300/80 flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div className="flex items-start gap-3.5">
@@ -617,7 +617,7 @@ export const DataMasterView: React.FC = () => {
       {/* SUBTAB 2: DATA SISWA 33 KELAS */}
       {/* ============================================================ */}
       {activeTab === 'siswa' && (
-        <div className="bg-white rounded-3xl border border-slate-200 shadow-xs p-6 space-y-4">
+        <div className="bg-white rounded-3xl border border-slate-200/90 shadow-sm p-6 space-y-4">
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
             {/* Filter Kelas & Search */}
             <div className="flex flex-wrap items-center gap-3">
@@ -764,7 +764,7 @@ export const DataMasterView: React.FC = () => {
       {/* SUBTAB 3: DATA KELAS (33 KELAS & WALI KELAS) */}
       {/* ============================================================ */}
       {activeTab === 'kelas' && (
-        <div className="bg-white rounded-3xl border border-slate-200 shadow-xs p-6 space-y-4">
+        <div className="bg-white rounded-3xl border border-slate-200/90 shadow-sm p-6 space-y-4">
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
             {/* Filter Tingkat & Search */}
             <div className="flex flex-wrap items-center gap-3">

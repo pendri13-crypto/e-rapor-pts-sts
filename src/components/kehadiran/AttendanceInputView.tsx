@@ -218,7 +218,7 @@ export const AttendanceInputView: React.FC<AttendanceInputViewProps> = ({
   return (
     <div className="space-y-6">
       {/* Page Header Card */}
-      <div className="bg-white rounded-3xl border border-slate-200 shadow-xs p-6 sm:p-7">
+      <div className="bg-white rounded-3xl border border-slate-200/90 shadow-sm p-6 sm:p-7">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-2 mb-1">
@@ -430,7 +430,7 @@ export const AttendanceInputView: React.FC<AttendanceInputViewProps> = ({
       </div>
 
       {/* Main Table Card */}
-      <div className="bg-white rounded-3xl border border-slate-200 shadow-xs overflow-hidden">
+      <div className="bg-white rounded-3xl border border-slate-200/90 shadow-sm overflow-hidden">
         {/* Table Toolbar */}
         <div className="p-4 sm:p-5 border-b border-slate-100 flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-2">

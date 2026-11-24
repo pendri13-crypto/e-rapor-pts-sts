@@ -69,7 +69,7 @@ export const LegerNilaiView: React.FC<LegerNilaiViewProps> = ({
   return (
     <div className="space-y-6">
       {/* Top Banner (Hidden in print) */}
-      <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-xs print:hidden">
+      <div className="bg-white rounded-3xl p-6 border border-slate-200/90 shadow-sm print:hidden">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-2 mb-1">
@@ -157,7 +157,7 @@ export const LegerNilaiView: React.FC<LegerNilaiViewProps> = ({
       </div>
 
       {/* Leger Table Container */}
-      <div className="bg-white rounded-3xl border border-slate-200 shadow-xs overflow-hidden p-6 print:border-none print:shadow-none print:p-0">
+      <div className="bg-white rounded-3xl border border-slate-200/90 shadow-sm overflow-hidden p-6 print:border-none print:shadow-none print:p-0">
         {/* Printable Official Kop for Leger */}
         <div className="hidden print:block text-center pb-4 mb-4 border-b-2 border-slate-900">
           <h2 className="text-base font-bold uppercase">{settings.namaSekolah}</h2>

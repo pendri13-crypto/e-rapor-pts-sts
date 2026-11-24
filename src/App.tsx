@@ -65,7 +65,7 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col justify-between selection:bg-teal-500 selection:text-white">
+    <div className="min-h-screen bg-slate-100 flex flex-col justify-between selection:bg-teal-500 selection:text-white">
       {/* Top Navigation */}
       <Navbar
         currentUser={currentUser}

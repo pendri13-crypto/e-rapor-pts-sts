@@ -83,7 +83,7 @@ export const RekapitulasiView: React.FC<RekapitulasiViewProps> = ({
   return (
     <div className="space-y-6">
       {/* Header Banner */}
-      <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-xs">
+      <div className="bg-white rounded-3xl p-6 border border-slate-200/90 shadow-sm">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-2 mb-1">
@@ -170,7 +170,7 @@ export const RekapitulasiView: React.FC<RekapitulasiViewProps> = ({
 
       {/* KPI Cards for the selected class */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs flex items-center justify-between">
+        <div className="bg-white p-5 rounded-2xl border border-slate-200/90 shadow-sm hover:shadow-md transition-all flex items-center justify-between">
           <div>
             <p className="text-xs font-bold uppercase tracking-wider text-slate-500">
               Rata-rata Nilai Kelas
@@ -187,7 +187,7 @@ export const RekapitulasiView: React.FC<RekapitulasiViewProps> = ({
           </div>
         </div>
 
-        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs flex items-center justify-between">
+        <div className="bg-white p-5 rounded-2xl border border-slate-200/90 shadow-sm hover:shadow-md transition-all flex items-center justify-between">
           <div>
             <p className="text-xs font-bold uppercase tracking-wider text-slate-500">
               Ketuntasan Belajar
@@ -204,7 +204,7 @@ export const RekapitulasiView: React.FC<RekapitulasiViewProps> = ({
           </div>
         </div>
 
-        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs flex items-center justify-between">
+        <div className="bg-white p-5 rounded-2xl border border-slate-200/90 shadow-sm hover:shadow-md transition-all flex items-center justify-between">
           <div>
             <p className="text-xs font-bold uppercase tracking-wider text-slate-500">
               Nilai Tertinggi (Rank 1)
@@ -221,7 +221,7 @@ export const RekapitulasiView: React.FC<RekapitulasiViewProps> = ({
           </div>
         </div>
 
-        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs flex items-center justify-between">
+        <div className="bg-white p-5 rounded-2xl border border-slate-200/90 shadow-sm hover:shadow-md transition-all flex items-center justify-between">
           <div>
             <p className="text-xs font-bold uppercase tracking-wider text-slate-500">
               Perlu Bimbingan / Remidi
@@ -240,7 +240,7 @@ export const RekapitulasiView: React.FC<RekapitulasiViewProps> = ({
       </div>
 
       {/* Main Tabs Navigation */}
-      <div className="bg-white rounded-3xl border border-slate-200 shadow-xs overflow-hidden">
+      <div className="bg-white rounded-3xl border border-slate-200/90 shadow-sm overflow-hidden">
         <div className="flex border-b border-slate-200 bg-slate-50/50 px-6 pt-3 gap-2">
           <button
             onClick={() => setActiveSubTab('ranking')}

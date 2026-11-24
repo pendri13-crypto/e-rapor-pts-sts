@@ -150,7 +150,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   );
 
   return (
-    <header className="sticky top-0 z-40 bg-white/80 backdrop-blur-xl border-b border-slate-200/80 shadow-[0_1px_3px_rgba(0,0,0,0.03)] print:hidden">
+    <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-xl border-b border-slate-200/90 shadow-xs print:hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 gap-3">
 
@@ -187,7 +187,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           </div>
 
           {/* Desktop Navigation - Pill Segmented Control */}
-          <nav className="hidden lg:flex items-center p-1 bg-slate-50/90 rounded-2xl border border-slate-200/80 shadow-inner">
+          <nav className="hidden lg:flex items-center p-1 bg-slate-100 rounded-2xl border border-slate-200/90 shadow-inner">
             {visibleNavItems.map((item) => {
               const Icon = item.icon;
               const isActive = activeTab === item.id;

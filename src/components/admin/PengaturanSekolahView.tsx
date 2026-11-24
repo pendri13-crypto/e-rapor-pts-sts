@@ -323,7 +323,7 @@ export const PengaturanSekolahView: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Top Header Card */}
-      <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-xs">
+      <div className="bg-white rounded-3xl p-6 border border-slate-200/90 shadow-sm">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-50 text-amber-800 border border-amber-200">
@@ -475,7 +475,7 @@ export const PengaturanSekolahView: React.FC = () => {
 
           {/* Form Pengaturan Tahun Ajaran & Titimangsa */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-            <div className="lg:col-span-7 bg-white rounded-3xl border border-slate-200 shadow-xs p-6 space-y-5">
+            <div className="lg:col-span-7 bg-white rounded-3xl border border-slate-200/90 shadow-sm p-6 space-y-5">
               <div className="flex items-center gap-2.5 pb-3 border-b border-slate-100">
                 <Calendar className="w-5 h-5 text-indigo-600" />
                 <div>
@@ -653,7 +653,7 @@ export const PengaturanSekolahView: React.FC = () => {
             </div>
 
             {/* Riwayat & Daftar Tahun Ajaran */}
-            <div className="lg:col-span-5 bg-white rounded-3xl border border-slate-200 shadow-xs p-6 space-y-4">
+            <div className="lg:col-span-5 bg-white rounded-3xl border border-slate-200/90 shadow-sm p-6 space-y-4">
               <div className="flex items-center justify-between pb-3 border-b border-slate-100">
                 <div className="flex items-center gap-2">
                   <Clock className="w-4 h-4 text-indigo-600" />
@@ -753,7 +753,7 @@ export const PengaturanSekolahView: React.FC = () => {
       {/* ============================================================ */}
       {activeTab === 'logo-kop' && (
         <div className="space-y-6 animate-in fade-in duration-150">
-          <div className="bg-white rounded-3xl border border-slate-200 shadow-xs p-6 space-y-4">
+          <div className="bg-white rounded-3xl border border-slate-200/90 shadow-sm p-6 space-y-4">
             <div className="flex items-center gap-2.5 pb-3 border-b border-slate-100">
               <Image className="w-5 h-5 text-indigo-600" />
               <div>
@@ -1060,7 +1060,7 @@ export const PengaturanSekolahView: React.FC = () => {
       {/* 3. TAB PROFIL IDENTITAS SATUAN PENDIDIKAN */}
       {/* ============================================================ */}
       {activeTab === 'profil' && (
-        <form onSubmit={handleSaveAll} className="bg-white rounded-3xl border border-slate-200 shadow-xs p-6 sm:p-7 space-y-5 animate-in fade-in duration-150">
+        <form onSubmit={handleSaveAll} className="bg-white rounded-3xl border border-slate-200/90 shadow-sm p-6 sm:p-7 space-y-5 animate-in fade-in duration-150">
           <div className="flex items-center justify-between pb-3 border-b border-slate-100">
             <div className="flex items-center gap-2.5">
               <School className="w-5 h-5 text-indigo-600" />
@@ -1213,7 +1213,7 @@ export const PengaturanSekolahView: React.FC = () => {
       {/* 4. TAB BOBOT PTS & KKM */}
       {/* ============================================================ */}
       {activeTab === 'bobot' && (
-        <form onSubmit={handleSaveAll} className="bg-white rounded-3xl border border-slate-200 shadow-xs p-6 sm:p-7 space-y-5 animate-in fade-in duration-150">
+        <form onSubmit={handleSaveAll} className="bg-white rounded-3xl border border-slate-200/90 shadow-sm p-6 sm:p-7 space-y-5 animate-in fade-in duration-150">
           <div className="flex items-center justify-between pb-3 border-b border-slate-100">
             <div className="flex items-center gap-2.5">
               <Sliders className="w-5 h-5 text-indigo-600" />
