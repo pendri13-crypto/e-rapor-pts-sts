@@ -452,7 +452,8 @@ export const StorageService = {
     const all = StorageService.getAttendance();
     const other = all.filter(a => a.classId !== classId);
     const updated = [...other, ...records];
-    StorageService.saveAttendance(updated);
+    setStored(STORAGE_KEYS.ATTENDANCE, updated);
+    SupabaseService.syncAttendance(records).catch(() => {});
     return updated;
   },
   getAttendanceForStudent: (studentId: string): AttendanceRecord | undefined => {
@@ -467,7 +468,8 @@ export const StorageService = {
     } else {
       all.push(record);
     }
-    StorageService.saveAttendance(all);
+    setStored(STORAGE_KEYS.ATTENDANCE, all);
+    SupabaseService.syncAttendance([record]).catch(() => {});
   },
 
   // Grades
@@ -489,8 +491,8 @@ export const StorageService = {
     }
 
     const updated = Array.from(recordMap.values());
-    StorageService.saveGrades(updated);
-    // Asynchronously push to Supabase
+    setStored(STORAGE_KEYS.GRADES, updated);
+    // Asynchronously push only modified records to Supabase Cloud
     SupabaseService.syncGrades(newRecords).catch(() => {});
     return updated;
   },

@@ -43,11 +43,47 @@ export const Navbar: React.FC<NavbarProps> = ({
   const [supabaseConnected, setSupabaseConnected] = useState<boolean | null>(null);
   const [pingLatency, setPingLatency] = useState<number | null>(null);
   const [isManualSyncing, setIsManualSyncing] = useState(false);
+  const [isAutoSyncing, setIsAutoSyncing] = useState(false);
   const [syncFeedback, setSyncFeedback] = useState<string | null>(null);
 
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [users, setUsers] = useState<UserAccount[]>(() => StorageService.getUsers());
   const [settings, setSettings] = useState(() => StorageService.getSettings());
+
+  // Listen to automatic background cloud sync events
+  useEffect(() => {
+    let clearTimer: any = null;
+
+    const handleSyncStatus = (e: any) => {
+      const detail = e.detail;
+      if (!detail) return;
+
+      if (detail.status === 'syncing') {
+        setIsAutoSyncing(true);
+        setSyncFeedback('Auto Sync ke Cloud...');
+      } else if (detail.status === 'synced') {
+        setIsAutoSyncing(false);
+        setSyncFeedback(`Tersimpan di Cloud (${detail.timestamp})`);
+        if (clearTimer) clearTimeout(clearTimer);
+        clearTimer = setTimeout(() => {
+          setSyncFeedback(null);
+        }, 3500);
+      } else if (detail.status === 'error') {
+        setIsAutoSyncing(false);
+        setSyncFeedback('Gagal Sync Cloud');
+        if (clearTimer) clearTimeout(clearTimer);
+        clearTimer = setTimeout(() => {
+          setSyncFeedback(null);
+        }, 3500);
+      }
+    };
+
+    window.addEventListener('erapor_cloud_sync_status', handleSyncStatus);
+    return () => {
+      window.removeEventListener('erapor_cloud_sync_status', handleSyncStatus);
+      if (clearTimer) clearTimeout(clearTimer);
+    };
+  }, []);
 
   const handleManualSync = async () => {
     setIsManualSyncing(true);
@@ -210,20 +246,38 @@ export const Navbar: React.FC<NavbarProps> = ({
             {/* Supabase Status & Cloud Sync Button */}
             <button
               onClick={handleManualSync}
-              disabled={isManualSyncing}
-              title={`Klik untuk sinkronisasi data terbaru dengan Cloud Supabase (${SUPABASE_URL})`}
-              className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold transition-all border ${supabaseConnected ? 'bg-emerald-50/80 text-emerald-700 border-emerald-200/80 hover:bg-emerald-100 active:scale-95' : supabaseConnected === false ? 'bg-rose-50/80 text-rose-700 border-rose-200/80' : 'bg-slate-100 text-slate-600 border-slate-200'}`}
+              disabled={isManualSyncing || isAutoSyncing}
+              title={`Cloud Database Terhubung • Data Tersinkronisasi Otomatis Setiap Perubahan (${SUPABASE_URL})`}
+              className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold transition-all border ${
+                isAutoSyncing
+                  ? 'bg-amber-50 text-amber-800 border-amber-300 ring-2 ring-amber-400/20 animate-pulse'
+                  : supabaseConnected
+                  ? 'bg-emerald-50/80 text-emerald-700 border-emerald-200/80 hover:bg-emerald-100 active:scale-95'
+                  : supabaseConnected === false
+                  ? 'bg-rose-50/80 text-rose-700 border-rose-200/80'
+                  : 'bg-slate-100 text-slate-600 border-slate-200'
+              }`}
             >
               <span className="relative flex h-2 w-2">
-                {supabaseConnected && !isManualSyncing && (
+                {supabaseConnected && !isManualSyncing && !isAutoSyncing && (
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
                 )}
-                <span className={`relative inline-flex rounded-full h-2 w-2 ${supabaseConnected ? 'bg-emerald-500' : supabaseConnected === false ? 'bg-rose-500' : 'bg-slate-400'}`} />
+                <span
+                  className={`relative inline-flex rounded-full h-2 w-2 ${
+                    isAutoSyncing
+                      ? 'bg-amber-500'
+                      : supabaseConnected
+                      ? 'bg-emerald-500'
+                      : supabaseConnected === false
+                      ? 'bg-rose-500'
+                      : 'bg-slate-400'
+                  }`}
+                />
               </span>
               <span className="font-medium">
-                {syncFeedback || (isManualSyncing ? 'Sinkron...' : 'Cloud Sync')}
+                {syncFeedback || (isManualSyncing ? 'Sinkron...' : isAutoSyncing ? 'Auto Sync...' : 'Cloud Sync')}
               </span>
-              {isManualSyncing ? (
+              {isManualSyncing || isAutoSyncing ? (
                 <span className="inline-block w-3 h-3 border-2 border-emerald-600 border-t-transparent rounded-full animate-spin" />
               ) : pingLatency ? (
                 <span className="text-[10px] opacity-75 font-mono">

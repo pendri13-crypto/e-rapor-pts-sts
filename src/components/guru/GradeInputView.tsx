@@ -15,7 +15,8 @@ import {
   HelpCircle,
   FileCheck,
   FileSpreadsheet,
-  Trash2
+  Trash2,
+  Cloud
 } from 'lucide-react';
 import * as XLSX from 'xlsx';
 import { UserAccount, SchoolClass, Subject, Student, GradeRecord } from '../../types';
@@ -80,6 +81,13 @@ export const GradeInputView: React.FC<GradeInputViewProps> = ({
   const [importStatus, setImportStatus] = useState<string | null>(null);
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
   const [successPopupMsg, setSuccessPopupMsg] = useState<string>('');
+
+  // Real-time Cloud Auto-Sync State
+  const [autoSyncStatus, setAutoSyncStatus] = useState<'idle' | 'saving' | 'saved'>('idle');
+  const [lastAutoSaveTime, setLastAutoSaveTime] = useState<string | null>(null);
+  const autoSaveTimerRef = useRef<any>(null);
+  const rowsRef = useRef<EditableGradeRow[]>(rows);
+  rowsRef.current = rows;
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -289,9 +297,16 @@ export const GradeInputView: React.FC<GradeInputViewProps> = ({
     }
   };
 
-  // Save all changes
-  const handleSaveAll = () => {
-    const recordsToSave: GradeRecord[] = rows.map(r => {
+  // Function to commit grades to Storage & Supabase Cloud
+  const flushSaveToCloud = (sourceRows?: EditableGradeRow[], onlyDirty: boolean = false) => {
+    const targetRows = sourceRows || rowsRef.current;
+    const dirtyRows = targetRows.filter(r => r.isDirty);
+    if (onlyDirty && dirtyRows.length === 0) return;
+
+    const rowsToProcess = onlyDirty ? dirtyRows : targetRows;
+    if (rowsToProcess.length === 0) return;
+
+    const recordsToSave: GradeRecord[] = rowsToProcess.map(r => {
       const t1 = typeof r.t1 === 'number' ? r.t1 : 0;
       const t2 = typeof r.t2 === 'number' ? r.t2 : 0;
       const t3 = typeof r.t3 === 'number' ? r.t3 : 0;
@@ -324,8 +339,66 @@ export const GradeInputView: React.FC<GradeInputViewProps> = ({
       };
     });
 
+    setAutoSyncStatus('saving');
     StorageService.saveBatchGrades(recordsToSave);
     setRows(prev => prev.map(row => ({ ...row, isDirty: false })));
+    const nowTime = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    setLastAutoSaveTime(nowTime);
+    setAutoSyncStatus('saved');
+  };
+
+  // Debounced auto-sync to cloud when rows are changed
+  useEffect(() => {
+    const hasDirty = rows.some(r => r.isDirty);
+    if (!hasDirty) return;
+
+    setAutoSyncStatus('saving');
+    if (autoSaveTimerRef.current) {
+      clearTimeout(autoSaveTimerRef.current);
+    }
+
+    autoSaveTimerRef.current = setTimeout(() => {
+      flushSaveToCloud(rowsRef.current, true);
+    }, 1200);
+
+    return () => {
+      if (autoSaveTimerRef.current) {
+        clearTimeout(autoSaveTimerRef.current);
+      }
+    };
+  }, [rows]);
+
+  // Flush pending changes before class/mapel switch or unmounting
+  const prevContextRef = useRef({ classId: selectedClassId, mapelId: selectedMapelId });
+  useEffect(() => {
+    if (
+      prevContextRef.current.classId !== selectedClassId ||
+      prevContextRef.current.mapelId !== selectedMapelId
+    ) {
+      if (rowsRef.current.some(r => r.isDirty)) {
+        flushSaveToCloud(rowsRef.current, true);
+      }
+      prevContextRef.current = { classId: selectedClassId, mapelId: selectedMapelId };
+    }
+  }, [selectedClassId, selectedMapelId]);
+
+  useEffect(() => {
+    return () => {
+      if (rowsRef.current.some(r => r.isDirty)) {
+        flushSaveToCloud(rowsRef.current, true);
+      }
+      if (autoSaveTimerRef.current) {
+        clearTimeout(autoSaveTimerRef.current);
+      }
+    };
+  }, []);
+
+  // Save all changes (Manual Trigger)
+  const handleSaveAll = () => {
+    if (autoSaveTimerRef.current) {
+      clearTimeout(autoSaveTimerRef.current);
+    }
+    flushSaveToCloud(rows, false);
     setSaveSuccessMsg(`Berhasil menyimpan nilai untuk kelas ${selectedClassId} (${currentSubject.nama}) dan disinkronkan ke Supabase Cloud!`);
     setSuccessPopupMsg(`Nilai siswa kelas ${selectedClassId} mata pelajaran ${currentSubject.nama} telah tersimpan dan disinkronkan ke Supabase Cloud.`);
     setShowSuccessPopup(true);
@@ -519,10 +592,26 @@ export const GradeInputView: React.FC<GradeInputViewProps> = ({
       <div className="bg-white rounded-3xl p-6 border border-slate-200/90 shadow-sm">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
           <div>
-            <div className="flex items-center gap-2 mb-1">
+            <div className="flex flex-wrap items-center gap-2 mb-1">
               <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-indigo-50 text-indigo-700 border border-indigo-200">
                 Input Nilai Praktis & Cepat
               </span>
+              {autoSyncStatus === 'saving' ? (
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-50 text-amber-800 border border-amber-300 animate-pulse">
+                  <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-ping" />
+                  <span>Menyimpan ke Cloud...</span>
+                </span>
+              ) : lastAutoSaveTime ? (
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-300">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                  <span>Tersimpan Otomatis di Cloud ({lastAutoSaveTime})</span>
+                </span>
+              ) : (
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold text-teal-700 bg-teal-50 border border-teal-200">
+                  <Cloud className="w-3.5 h-3.5 text-teal-600" />
+                  <span>Cloud Auto-Sync Aktif</span>
+                </span>
+              )}
               <span className="text-xs text-slate-500">
                 Format Bobot: Formatif ({settings.bobotFormatif}%) • UH ({settings.bobotUH}%) • PTS ({settings.bobotPTS}%)
               </span>

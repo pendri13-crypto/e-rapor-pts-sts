@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   UserCheck,
   Save,
@@ -13,7 +13,8 @@ import {
   HeartPulse,
   Clock,
   UserX,
-  FileText
+  FileText,
+  Cloud
 } from 'lucide-react';
 import { UserAccount, SchoolClass, Student, AttendanceRecord } from '../../types';
 import { StorageService } from '../../services/storage';
@@ -63,6 +64,13 @@ export const AttendanceInputView: React.FC<AttendanceInputViewProps> = ({
   const [saveSuccessMsg, setSaveSuccessMsg] = useState<string | null>(null);
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
   const [successPopupMsg, setSuccessPopupMsg] = useState('');
+
+  // Real-time Cloud Auto-Sync State
+  const [autoSyncStatus, setAutoSyncStatus] = useState<'idle' | 'saving' | 'saved'>('idle');
+  const [lastAutoSaveTime, setLastAutoSaveTime] = useState<string | null>(null);
+  const autoSaveTimerRef = useRef<any>(null);
+  const rowsRef = useRef<EditableAttendanceRow[]>(rows);
+  rowsRef.current = rows;
 
   const currentClass = classes.find(c => c.id === selectedClassId);
 
@@ -142,11 +150,16 @@ export const AttendanceInputView: React.FC<AttendanceInputViewProps> = ({
     setTimeout(() => setSaveSuccessMsg(null), 3500);
   };
 
-  // Save all attendance records
-  const handleSaveAll = () => {
-    setIsSaving(true);
+  // Function to commit attendance to Storage & Supabase Cloud
+  const flushSaveToCloud = (sourceRows?: EditableAttendanceRow[], onlyDirty: boolean = false) => {
+    const targetRows = sourceRows || rowsRef.current;
+    const dirtyRows = targetRows.filter(r => r.isDirty);
+    if (onlyDirty && dirtyRows.length === 0) return;
 
-    const recordsToSave: AttendanceRecord[] = rows.map(r => ({
+    const rowsToProcess = onlyDirty ? dirtyRows : targetRows;
+    if (rowsToProcess.length === 0) return;
+
+    const recordsToSave: AttendanceRecord[] = rowsToProcess.map(r => ({
       studentId: r.student.id,
       classId: selectedClassId,
       sakit: typeof r.sakit === 'number' ? r.sakit : 0,
@@ -155,9 +168,64 @@ export const AttendanceInputView: React.FC<AttendanceInputViewProps> = ({
       catatanWaliKelas: r.catatanWaliKelas.trim()
     }));
 
+    setAutoSyncStatus('saving');
     StorageService.saveAttendanceForClass(selectedClassId, recordsToSave);
-
     setRows(prev => prev.map(r => ({ ...r, isDirty: false })));
+    const nowTime = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    setLastAutoSaveTime(nowTime);
+    setAutoSyncStatus('saved');
+  };
+
+  // Debounced auto-sync to cloud when attendance rows are modified
+  useEffect(() => {
+    const hasDirty = rows.some(r => r.isDirty);
+    if (!hasDirty) return;
+
+    setAutoSyncStatus('saving');
+    if (autoSaveTimerRef.current) {
+      clearTimeout(autoSaveTimerRef.current);
+    }
+
+    autoSaveTimerRef.current = setTimeout(() => {
+      flushSaveToCloud(rowsRef.current, true);
+    }, 1200);
+
+    return () => {
+      if (autoSaveTimerRef.current) {
+        clearTimeout(autoSaveTimerRef.current);
+      }
+    };
+  }, [rows]);
+
+  // Flush pending changes before class switch or unmounting
+  const prevClassRef = useRef(selectedClassId);
+  useEffect(() => {
+    if (prevClassRef.current !== selectedClassId) {
+      if (rowsRef.current.some(r => r.isDirty)) {
+        flushSaveToCloud(rowsRef.current, true);
+      }
+      prevClassRef.current = selectedClassId;
+    }
+  }, [selectedClassId]);
+
+  useEffect(() => {
+    return () => {
+      if (rowsRef.current.some(r => r.isDirty)) {
+        flushSaveToCloud(rowsRef.current, true);
+      }
+      if (autoSaveTimerRef.current) {
+        clearTimeout(autoSaveTimerRef.current);
+      }
+    };
+  }, []);
+
+  // Save all attendance records (Manual Trigger)
+  const handleSaveAll = () => {
+    if (autoSaveTimerRef.current) {
+      clearTimeout(autoSaveTimerRef.current);
+    }
+    setIsSaving(true);
+    flushSaveToCloud(rows, false);
     setIsSaving(false);
     setSuccessPopupMsg(`Data kehadiran kelas ${currentClass?.nama} (S, I, A) berhasil disimpan dan disinkronkan ke Leger & Rapor!`);
     setShowSuccessPopup(true);
@@ -221,10 +289,26 @@ export const AttendanceInputView: React.FC<AttendanceInputViewProps> = ({
       <div className="bg-white rounded-3xl border border-slate-200/90 shadow-sm p-6 sm:p-7">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
           <div>
-            <div className="flex items-center gap-2 mb-1">
+            <div className="flex flex-wrap items-center gap-2 mb-1">
               <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-teal-50 text-teal-700 border border-teal-200">
                 Presensi & Ketidakhadiran Siswa
               </span>
+              {autoSyncStatus === 'saving' ? (
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-50 text-amber-800 border border-amber-300 animate-pulse">
+                  <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-ping" />
+                  <span>Menyimpan ke Cloud...</span>
+                </span>
+              ) : lastAutoSaveTime ? (
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-300">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                  <span>Tersimpan Otomatis di Cloud ({lastAutoSaveTime})</span>
+                </span>
+              ) : (
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold text-teal-700 bg-teal-50 border border-teal-200">
+                  <Cloud className="w-3.5 h-3.5 text-teal-600" />
+                  <span>Cloud Auto-Sync Aktif</span>
+                </span>
+              )}
               <span className="text-xs text-slate-400">
                 Periode: {settings.namaPeriodePTS || 'PTS 3 Bulanan'}
               </span>

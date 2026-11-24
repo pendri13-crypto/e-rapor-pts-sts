@@ -23,6 +23,41 @@ export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
   },
 });
 
+export const isSupabaseConfigured = (): boolean => {
+  return Boolean(
+    SUPABASE_URL &&
+    SUPABASE_ANON_KEY &&
+    SUPABASE_URL.startsWith('http') &&
+    !SUPABASE_URL.includes('placeholder')
+  );
+};
+
+export interface CloudSyncStatusDetail {
+  status: 'syncing' | 'synced' | 'error';
+  type: string;
+  message?: string;
+  timestamp: string;
+}
+
+export const notifySyncStatus = (
+  status: 'syncing' | 'synced' | 'error',
+  type: string = 'data',
+  message?: string
+) => {
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(
+      new CustomEvent<CloudSyncStatusDetail>('erapor_cloud_sync_status', {
+        detail: {
+          status,
+          type,
+          message,
+          timestamp: new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
+        },
+      })
+    );
+  }
+};
+
 // SQL Schema DDL if user wants to create tables in Supabase SQL Editor
 export const SUPABASE_SQL_SCHEMA = `-- ====================================================
 -- SCHEMA DATABASE e-RAPOR PENILAIAN TENGAH SEMESTER (PTS)
@@ -213,6 +248,9 @@ export const SupabaseService = {
   // Push Grades to Supabase
   syncGrades: async (grades: GradeRecord[]): Promise<boolean> => {
     try {
+      if (!isSupabaseConfigured() || !grades || grades.length === 0) return true;
+      notifySyncStatus('syncing', 'nilai', 'Menyimpan nilai ke cloud...');
+
       const payload = grades.map(g => ({
         id: g.id,
         student_id: g.studentId,
@@ -243,12 +281,15 @@ export const SupabaseService = {
         const { error } = await supabase.from('grade_records').upsert(chunk, { onConflict: 'id' });
         if (error) {
           console.warn('Supabase syncGrades warning:', error.message);
+          notifySyncStatus('error', 'nilai', error.message);
           return false;
         }
       }
+      notifySyncStatus('synced', 'nilai', `${grades.length} nilai tersimpan di cloud`);
       return true;
-    } catch (err) {
+    } catch (err: any) {
       console.warn('Supabase syncGrades error:', err);
+      notifySyncStatus('error', 'nilai', err?.message || 'Gagal simpan nilai ke cloud');
       return false;
     }
   },
@@ -258,6 +299,7 @@ export const SupabaseService = {
     try {
       if (!isSupabaseConfigured()) return false;
       if (!records || records.length === 0) return true;
+      notifySyncStatus('syncing', 'kehadiran', 'Menyimpan kehadiran ke cloud...');
 
       const payload = records.map(r => ({
         id: `att-${r.studentId}`,
@@ -275,12 +317,15 @@ export const SupabaseService = {
         const { error } = await supabase.from('attendance_records').upsert(chunk, { onConflict: 'id' });
         if (error) {
           console.warn('Supabase syncAttendance warning:', error.message);
+          notifySyncStatus('error', 'kehadiran', error.message);
           return false;
         }
       }
+      notifySyncStatus('synced', 'kehadiran', `${records.length} kehadiran tersimpan di cloud`);
       return true;
-    } catch (err) {
+    } catch (err: any) {
       console.warn('Supabase syncAttendance error:', err);
+      notifySyncStatus('error', 'kehadiran', err?.message || 'Gagal simpan kehadiran ke cloud');
       return false;
     }
   },
@@ -288,6 +333,9 @@ export const SupabaseService = {
   // Push Students to Supabase
   syncStudents: async (students: Student[]): Promise<boolean> => {
     try {
+      if (!isSupabaseConfigured() || !students || students.length === 0) return true;
+      notifySyncStatus('syncing', 'siswa', 'Menyimpan data siswa ke cloud...');
+
       const payload = students.map(s => ({
         id: s.id,
         nis: s.nis,
@@ -306,12 +354,15 @@ export const SupabaseService = {
         const { error } = await supabase.from('students').upsert(chunk, { onConflict: 'id' });
         if (error) {
           console.warn('Supabase syncStudents warning:', error.message);
+          notifySyncStatus('error', 'siswa', error.message);
           return false;
         }
       }
+      notifySyncStatus('synced', 'siswa', 'Data siswa tersimpan di cloud');
       return true;
-    } catch (err) {
+    } catch (err: any) {
       console.warn('Supabase syncStudents error:', err);
+      notifySyncStatus('error', 'siswa', err?.message || 'Gagal simpan siswa');
       return false;
     }
   },
@@ -319,6 +370,9 @@ export const SupabaseService = {
   // Push Users to Supabase
   syncUsers: async (users: UserAccount[]): Promise<boolean> => {
     try {
+      if (!isSupabaseConfigured() || !users || users.length === 0) return true;
+      notifySyncStatus('syncing', 'user', 'Menyimpan akun pengguna ke cloud...');
+
       const payload = users.map(u => ({
         id: u.id,
         nip: u.nip,
@@ -337,11 +391,14 @@ export const SupabaseService = {
       const { error } = await supabase.from('user_accounts').upsert(payload, { onConflict: 'id' });
       if (error) {
         console.warn('Supabase syncUsers warning:', error.message);
+        notifySyncStatus('error', 'user', error.message);
         return false;
       }
+      notifySyncStatus('synced', 'user', 'Akun pengguna tersimpan di cloud');
       return true;
-    } catch (err) {
+    } catch (err: any) {
       console.warn('Supabase syncUsers error:', err);
+      notifySyncStatus('error', 'user', err?.message || 'Gagal simpan akun');
       return false;
     }
   },
@@ -349,6 +406,9 @@ export const SupabaseService = {
   // Push Settings to Supabase
   syncSettings: async (settings: SchoolSettings): Promise<boolean> => {
     try {
+      if (!isSupabaseConfigured()) return false;
+      notifySyncStatus('syncing', 'pengaturan', 'Menyimpan pengaturan ke cloud...');
+
       const payload = {
         id: 'default',
         nama_sekolah: settings.namaSekolah,
@@ -382,11 +442,14 @@ export const SupabaseService = {
       const { error } = await supabase.from('school_settings').upsert(payload, { onConflict: 'id' });
       if (error) {
         console.warn('Supabase syncSettings warning:', error.message);
+        notifySyncStatus('error', 'pengaturan', error.message);
         return false;
       }
+      notifySyncStatus('synced', 'pengaturan', 'Pengaturan tersimpan di cloud');
       return true;
-    } catch (err) {
+    } catch (err: any) {
       console.warn('Supabase syncSettings error:', err);
+      notifySyncStatus('error', 'pengaturan', err?.message || 'Gagal simpan pengaturan');
       return false;
     }
   },
@@ -394,6 +457,9 @@ export const SupabaseService = {
   // Sync Classes to Supabase
   syncClasses: async (classes: SchoolClass[]): Promise<boolean> => {
     try {
+      if (!isSupabaseConfigured() || !classes || classes.length === 0) return true;
+      notifySyncStatus('syncing', 'kelas', 'Menyimpan data kelas ke cloud...');
+
       const payload = classes.map(c => ({
         id: c.id,
         tingkat: c.tingkat,
@@ -409,11 +475,14 @@ export const SupabaseService = {
       const { error } = await supabase.from('classes').upsert(payload, { onConflict: 'id' });
       if (error) {
         console.warn('Supabase syncClasses warning:', error.message);
+        notifySyncStatus('error', 'kelas', error.message);
         return false;
       }
+      notifySyncStatus('synced', 'kelas', 'Data kelas tersimpan di cloud');
       return true;
-    } catch (err) {
+    } catch (err: any) {
       console.warn('Supabase syncClasses error:', err);
+      notifySyncStatus('error', 'kelas', err?.message || 'Gagal simpan kelas');
       return false;
     }
   },
@@ -421,6 +490,9 @@ export const SupabaseService = {
   // Sync Subjects to Supabase
   syncSubjects: async (subjects: Subject[]): Promise<boolean> => {
     try {
+      if (!isSupabaseConfigured() || !subjects || subjects.length === 0) return true;
+      notifySyncStatus('syncing', 'mapel', 'Menyimpan mata pelajaran ke cloud...');
+
       const payload = subjects.map(s => ({
         id: s.id,
         kode: s.kode,
@@ -433,11 +505,14 @@ export const SupabaseService = {
       const { error } = await supabase.from('subjects').upsert(payload, { onConflict: 'id' });
       if (error) {
         console.warn('Supabase syncSubjects warning:', error.message);
+        notifySyncStatus('error', 'mapel', error.message);
         return false;
       }
+      notifySyncStatus('synced', 'mapel', 'Mata pelajaran tersimpan di cloud');
       return true;
-    } catch (err) {
+    } catch (err: any) {
       console.warn('Supabase syncSubjects error:', err);
+      notifySyncStatus('error', 'mapel', err?.message || 'Gagal simpan mapel');
       return false;
     }
   },
